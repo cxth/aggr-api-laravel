@@ -14,13 +14,13 @@
 
 
 -- Dumping database structure for isoftbetgamehub_codeception
--- DROP DATABASE IF EXISTS `isoftbetgamehub_codeception`;
--- CREATE DATABASE IF NOT EXISTS `isoftbetgamehub_codeception` /*!40100 DEFAULT CHARACTER SET latin1 */;
--- USE `isoftbetgamehub_codeception`;
+DROP DATABASE IF EXISTS `isoftbetgamehub_codeception`;
+CREATE DATABASE IF NOT EXISTS `isoftbetgamehub_codeception` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `isoftbetgamehub_codeception`;
 
-DROP DATABASE IF EXISTS `new_sail_application`;
-CREATE DATABASE IF NOT EXISTS `new_sail_application` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `new_sail_application`;
+-- DROP DATABASE IF EXISTS `new_sail_application`;
+-- CREATE DATABASE IF NOT EXISTS `new_sail_application` /*!40100 DEFAULT CHARACTER SET latin1 */;
+-- USE `new_sail_application`;
 
 -- Dumping structure for table isoftbetgamehub_codeception.action_log_agent
 DROP TABLE IF EXISTS `action_log_agent`;
@@ -1015,7 +1015,7 @@ CREATE TABLE IF NOT EXISTS `bonuses` (
   KEY `currencycode` (`currencycode`),
   KEY `activated_by` (`activated_by`),
   CONSTRAINT `bonuses_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `agents` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.bonuses: ~0 rows (approximately)
 /*!40000 ALTER TABLE `bonuses` DISABLE KEYS */;
@@ -1044,7 +1044,7 @@ CREATE TABLE IF NOT EXISTS `bonuses_rebate` (
   PRIMARY KEY (`id`),
   KEY `FK_bonuses_agents` (`creator`),
   CONSTRAINT `bonuses_rebate_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `agents` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.bonuses_rebate: ~0 rows (approximately)
 /*!40000 ALTER TABLE `bonuses_rebate` DISABLE KEYS */;
@@ -1126,7 +1126,7 @@ CREATE TABLE IF NOT EXISTS `bonus_rebate_player` (
   KEY `finished_on` (`finished_on`),
   KEY `issue_time` (`issue_time`),
   CONSTRAINT `bonus_rebate_player_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.bonus_rebate_player: ~0 rows (approximately)
 /*!40000 ALTER TABLE `bonus_rebate_player` DISABLE KEYS */;
@@ -1872,7 +1872,7 @@ CREATE TABLE IF NOT EXISTS `email_templates_string` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `type` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.email_templates_string: ~0 rows (approximately)
 /*!40000 ALTER TABLE `email_templates_string` DISABLE KEYS */;
@@ -2419,7 +2419,7 @@ CREATE TABLE IF NOT EXISTS `player_balances` (
   KEY `id` (`id`),
   KEY `playerid` (`playerid`),
   KEY `date` (`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.player_balances: ~0 rows (approximately)
 /*!40000 ALTER TABLE `player_balances` DISABLE KEYS */;
@@ -2477,7 +2477,7 @@ CREATE TABLE IF NOT EXISTS `player_cryptocurrency_details_bckup` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `additional` varchar(512) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.player_cryptocurrency_details_bckup: ~0 rows (approximately)
 /*!40000 ALTER TABLE `player_cryptocurrency_details_bckup` DISABLE KEYS */;
@@ -3001,7 +3001,7 @@ CREATE TABLE IF NOT EXISTS `splayers_fun` (
   `disabled` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `player_id` (`player_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.splayers_fun: ~0 rows (approximately)
 /*!40000 ALTER TABLE `splayers_fun` DISABLE KEYS */;
@@ -3486,7 +3486,7 @@ CREATE TABLE IF NOT EXISTS `view_ar` (
   KEY `agentid` (`agentid`),
   KEY `date` (`date`),
   KEY `playerid_date` (`playerid`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.view_ar: ~0 rows (approximately)
 /*!40000 ALTER TABLE `view_ar` DISABLE KEYS */;
@@ -4394,7 +4394,7 @@ CREATE TABLE IF NOT EXISTS `view_er` (
   KEY `agentid` (`agentid`),
   KEY `date` (`date`),
   KEY `playerid_date` (`playerid`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.view_er: ~0 rows (approximately)
 /*!40000 ALTER TABLE `view_er` DISABLE KEYS */;
@@ -5097,7 +5097,7 @@ CREATE TABLE IF NOT EXISTS `view_gs` (
   KEY `agentid` (`agentid`),
   KEY `date` (`date`),
   KEY `playerid_date` (`playerid`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.view_gs: ~0 rows (approximately)
 /*!40000 ALTER TABLE `view_gs` DISABLE KEYS */;
@@ -6566,7 +6566,7 @@ CREATE TABLE IF NOT EXISTS `view_mc` (
   KEY `agentid` (`agentid`),
   KEY `date` (`date`),
   KEY `playerid_date` (`playerid`,`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPRESSED;
 
 -- Dumping data for table isoftbetgamehub_codeception.view_mc: ~0 rows (approximately)
 /*!40000 ALTER TABLE `view_mc` DISABLE KEYS */;
