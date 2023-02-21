@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class GameCollection extends ResourceCollection
 {
+    public static $wrap = '';
+    
     /**
      * Transform the resource collection into an array.
      *
@@ -14,6 +16,10 @@ class GameCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
+        return [
+           'id' => 100,
+           'name' => 'Test Game Hello' 
+        ];
     }
 }
