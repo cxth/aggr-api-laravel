@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Support\Facades\Http;
 
 class GameService
 {
@@ -9,7 +10,7 @@ class GameService
 
     }
 
-    public static function getGameList()
+    public static function getGameListBak()
     {
         $data1 = [
             'api_password' => 'tabella-kingschance!',
@@ -51,5 +52,23 @@ class GameService
           return json_decode($response);
           //return $response;
         }
+    }
+
+    public static function getGameList() 
+    {
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->post('https://aggr.reeltech.co/api/seamless/providerisb', [
+            'api_password' => 'tabella-kingschance!',
+            'api_login' => 'tabella-kingschance-stage_mc_s',
+            'method' => 'getGameList',
+            'show_systems' => 0,
+            'currency' => 'EUR',
+            ]);
+
+        // $responseData = $response->json();
+        $responseData = $response->collect();
+        // dd($responseData);
+        return $responseData;
     }
 }
