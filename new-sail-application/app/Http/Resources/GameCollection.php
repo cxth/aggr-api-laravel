@@ -14,14 +14,21 @@ class GameCollection extends ResourceCollection
      *
      * @return array<int|string, mixed>
      */
-    public function toArray(Request $request): array
-    {
-        //print_r($request);
+    // public function toArray(Request $request): array
+    // {
+    //     //print_r($request);
         
-        // return parent::toArray($request);
-        return [
-           'id' => $this->collection,
-           'gameCount' => $this->count() 
-        ];
+    //     // return parent::toArray($request);
+    //     return [
+    //        'id' => $this->collection,
+    //        'gameCount' => $this->count() 
+    //     ];
+    // }
+
+
+    public function toArray(Request $request)
+    {
+        $collection = collect($request->response)->slice(0, 3);
+        return $collection->all();
     }
 }
