@@ -66,9 +66,11 @@ class GameService
             'currency' => 'EUR',
             ]);
 
-        // $responseData = $response->json();
-        $responseData = $response->collect();
+        $responseData = $response->json();
+        // $responseData = $response->collect();
         // dd($responseData);
         return $responseData;
+
+        // return $response;
     }
 }
