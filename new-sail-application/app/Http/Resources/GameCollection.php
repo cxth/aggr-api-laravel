@@ -25,10 +25,16 @@ class GameCollection extends ResourceCollection
     //     ];
     // }
 
-
-    public function toArray(Request $request)
+    public function __construct($resource)
     {
-        $collection = collect($request->response)->slice(0, 3);
+        $collection = collect($resource->response)->slice(0, 3);
         return $collection->all();
     }
+
+
+    // public function toArray(Request $request)
+    // {
+    //     $collection = collect($request->response)->slice(0, 3);
+    //     return $collection->all();
+    // }
 }

@@ -98,12 +98,51 @@ class GameController extends Controller
 
     public function index(IndexRequest $request)
     {
+        // print_r($request->filter);
+        
         // return new GameCollection(GameService::getGameList());
 
         $games = GameService::getGameList();
-        $gamesCollection = collect($games->response)->slice(0, 3);
-        dd($gamesCollection->all());
+        $gamesCollection = collect($games->response);
+
+        $start = 0;
+        $max = 10;
+        if (isset($request->filter) && str_contains($request->filter, ':')) {
+            $filter = $request->filter;
+            list($param, $value) = explode(':', $filter);
 
 
+            // filter $gamesCollection
+            if ($param == 'provider') {
+                //replace underscore for spaces
+                $value = str_replace("-", " ", $value);
+                $filtered = $gamesCollection->filter(function ($val) use ($value) {
+                    return strtolower($val->category) == strtolower($value);
+                });
+            }
+            else {
+                $filtered = $gamesCollection;
+            }
+
+            if ($param == 'page') {
+                if ($value == 'all') {
+                    $max = count($gamesCollection);
+                } else {
+                    $max = $value * $max;
+                    $start = $max - 10;
+                } 
+            }
+        }
+
+        print_r('max: ' . $max);
+        print_r('start: ' . $start);
+
+        $chunked = $filtered->slice($start, $max);
+        
+        // $gamesCollection = collect($games->response);
+        // return $gamesCollection->all();
+
+        // dd($filtered->all());
+        dd($chunked->all());
     }
 }
