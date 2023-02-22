@@ -8,6 +8,7 @@ use App\Http\Requests\Game\IndexRequest;
 use App\Http\Resources\GameCollection;
 use App\Models\Game;
 use App\Services\GameService;
+
 use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
@@ -21,17 +22,21 @@ class GameController extends Controller
         $this->gameService = $gameService;
     }
 
-    public function index() 
-    {
-        //return "hello";
-
-        $games = DB::table('games')->get();
-        print_r($games);
-    }
-
-    // public function index(IndexRequest $request): GameCollection
+    // public function index() 
     // {
-    //     // return new GameCollection($this->game->getFiltered($request->validated()));
-    //     return new GameCollection();
+    //     //return "hello";
+
+    //     // $games = DB::table('games')->get();
+
+    //     // $games = Game::find(1521);
+    //     $games = Game::take(10)->get();
+    //     print_r($games);
     // }
+
+    public function index(IndexRequest $request): GameCollection
+    {
+        // return new GameCollection($this->game->getFiltered($request->validated()));
+        return new GameCollection(Game::take(3)->get());
+        // return new GameCollection();
+    }
 }

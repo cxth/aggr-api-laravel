@@ -16,10 +16,12 @@ class GameCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+        //print_r($request);
+        
         // return parent::toArray($request);
         return [
-           'id' => 100,
-           'name' => 'Test Game Hello' 
+           'id' => $this->collection,
+           'gameCount' => $this->count() 
         ];
     }
 }
