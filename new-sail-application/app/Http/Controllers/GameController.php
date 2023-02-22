@@ -164,8 +164,8 @@ class GameController extends Controller
                 if ($value == 'all') {
                     $max = count($gamesCollection);
                 } else {
-                    $max = $value * $max; 
-                    $start = $max - 10;
+                    $max = 10; 
+                    $start = ($max * $value) - 10;
                 }
                 $filtered = $gamesCollection;
             } else {
@@ -181,8 +181,8 @@ class GameController extends Controller
                     $start = 0;
                     $max = count($filtered);
                 } else {
-                    $max = $pageVal * 10; 
-                    $start = $max - 10;
+                    $max = 10; 
+                    $start = ($max * $pageVal) - 10;
                 }
             }
 
