@@ -1,102 +1,69 @@
 <?php
 
 namespace App\Services;
+
 use Illuminate\Support\Facades\Http;
 
 class GameService
 {
+    public $gameId;
+    
     public function __construct()
     {
 
     }
 
-    public static function getGameListBak()
+    public function getGamePayload()
     {
-        $data1 = [
-            'api_password' => 'tabella-kingschance!',
-            'api_login' => 'tabella-kingschance-stage_mc_s',
-            'method' => 'getGameList',
-            'show_systems' => 0,
-            'currency' => 'EUR',
-        ];
-        
-        $curl = curl_init();
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://aggr.reeltech.co/api/seamless/providerisb",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30000,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_POSTFIELDS => json_encode($data1),
-            CURLOPT_HTTPHEADER => array(
-                // Set here requred headers
-                "accept: */*",
-                "accept-language: en-US,en;q=0.8",
-                "content-type: application/json",
-            ),
-        ));
-        
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        
-        curl_close($curl);
-        
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-        //   print_r(json_decode($response));
-
-          return json_decode($response);
-          //return $response;
-        }
-    }
-
-    public static function getGame($id)
-    {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post('https://aggr.reeltech.co/api/seamless/providerisb', [
-            'api_password' => 'tabella-kingschance!',
-            'api_login' => 'tabella-kingschance-stage_mc_s',
+        return [
+            'api_password' => config('global.game.api.password'),
+            'api_login' => config('global.game.api.login'),
             'method' => 'getGame',
-            'currency' => 'EUR',
-            'lang' => 'en',
-            'gameid' => $id,
+            'currency' => config('global.game.currency'),
+            'lang' => config('global.game.lang'),
             'homeurl' => '',
             'cashierurl' => '',
-            'play_for_fun' => 'true',
+            'play_for_fun' => config('global.game.playForFun'),
             'sessionid' => 'this-identifies-the-casino-session',
             'gamesession_id' => 'this-identifies-the-game-sesion',
             'user_username' => 'simple_user',
             'user_password' => 'sample_token'
-            ]);
+        ];
+    }
+
+    public function getGameListPayload()
+    {
+        return [
+            'api_password' => config('global.game.api.password'),
+            'api_login' => config('global.game.api.login'),
+            'method' => 'getGameList',
+            'show_systems' => 0,
+            'currency' => config('global.game.currency'),
+        ];
+    }
+
+    public function getGame()
+    {
+        $gameIdSetting = array('gameid' => $this->gameId);
+        $payload = array_merge($gameIdSetting, $this->getGamePayload());
+        
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->post(config('global.game.api.url'), $payload);
 
         $responseData = $response->json();
-        // $responseData = $response->collect();
-        // dd($responseData);
+
         return $responseData;
     }
 
-    public static function getGameList() 
-    {
+    public function getGameList() 
+    {        
         $response = Http::withHeaders([
             'Content-Type' => 'application/json'
-        ])->post('https://aggr.reeltech.co/api/seamless/providerisb', [
-            'api_password' => 'tabella-kingschance!',
-            'api_login' => 'tabella-kingschance-stage_mc_s',
-            'method' => 'getGameList',
-            'show_systems' => 0,
-            'currency' => 'EUR',
-            ]);
+        ])->post(config('global.game.api.url'), $this->getGameListPayload());
 
         $responseData = $response->json();
-        // $responseData = $response->collect();
-        // dd($responseData);
-        return $responseData;
 
-        // return $response;
+        return $responseData;
     }
 }
