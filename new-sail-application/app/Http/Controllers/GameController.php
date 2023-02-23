@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 
+use Illuminate\Support\Facades\Cache;
+
 // use Illuminate\Support\Facades\View;
 
 class GameController extends Controller
@@ -39,7 +41,10 @@ class GameController extends Controller
             return view('game', ['data' => $response]);
         }
 
-        $games = GameService::getGameList();
+        $games = Cache::remember('game-list', '86400', function () {
+            return GameService::getGameList();
+        });
+        
         $gamesCollection = collect($games['response']);
         $filtered = $gamesCollection;
 
