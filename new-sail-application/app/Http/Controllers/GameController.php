@@ -112,8 +112,16 @@ class GameController extends Controller
         // return new GameCollection($response);
     }
 
-    public function index(IndexRequest $request)
+    public function index(IndexRequest $request, $id=null)
     {
+        // dd($id);
+        if ($id) {
+            // $res = GameService::getGame($id);
+            // dd($res);
+            return GameService::getGame($id);
+        }
+
+
         // print_r($request->filter);
         
         // return new GameCollection(GameService::getGameList());

@@ -20,5 +20,6 @@ use App\Http\Controllers\GameController;
 // });
 
 Route::prefix('games')->group(function () {
-    Route::get('/{param?}', [GameController::class, 'index']);
+    // Route::get('/{param?}', [GameController::class, 'index']);
+    Route::get('/{id?}', [GameController::class, 'index']);
 });
