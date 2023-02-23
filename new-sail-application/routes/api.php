@@ -19,7 +19,7 @@ use App\Http\Controllers\GameController;
 //     return $request->user();
 // });
 
-Route::prefix('games')->group(function () {
-    // Route::get('/{param?}', [GameController::class, 'index']);
-    Route::get('/{id?}', [GameController::class, 'index']);
-});
+// Route::prefix('games')->group(function () {
+//     // Route::get('/{param?}', [GameController::class, 'index']);
+//     Route::get('/{id?}', [GameController::class, 'index']);
+// });

@@ -10,17 +10,15 @@ class GameService
 
     }
 
-    public function getGame($id)
+    public function getGamePayload()
     {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post('https://aggr.reeltech.co/api/seamless/providerisb', [
+        return [
             'api_password' => 'tabella-kingschance!',
             'api_login' => 'tabella-kingschance-stage_mc_s',
             'method' => 'getGame',
             'currency' => 'EUR',
             'lang' => 'en',
-            'gameid' => $id,
+            // 'gameid' => $id,
             'homeurl' => '',
             'cashierurl' => '',
             'play_for_fun' => 'true',
@@ -28,7 +26,17 @@ class GameService
             'gamesession_id' => 'this-identifies-the-game-sesion',
             'user_username' => 'simple_user',
             'user_password' => 'sample_token'
-            ]);
+        ];
+    }
+
+    public function getGame($id)
+    {
+        $gameIdSetting = array('gameid' => $id);
+        $payload = array_merge($gameIdSetting, $this->getGamePayload());
+        
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->post('https://aggr.reeltech.co/api/seamless/providerisb', $payload);
 
         $responseData = $response->json();
         // $responseData = $response->collect();

@@ -17,6 +17,8 @@ use GuzzleHttp\RequestOptions;
 
 use Illuminate\Support\Facades\DB;
 
+// use Illuminate\Support\Facades\View;
+
 class GameController extends Controller
 {
     protected Game $game;
@@ -31,7 +33,9 @@ class GameController extends Controller
     public function index(IndexRequest $request, $id=null)
     {
         if ($id) {
-            return $this->gameService->getGame($id);
+            // return $this->gameService->getGame($id);
+            $response = $this->gameService->getGame($id);
+            return view('game', ['data' => $response]);
         }
 
         $games = GameService::getGameList();
