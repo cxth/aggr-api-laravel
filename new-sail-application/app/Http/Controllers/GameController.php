@@ -2,75 +2,32 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
-
 use App\Http\Requests\Game\IndexRequest;
-use App\Http\Resources\GameCollection;
-use App\Models\Game;
-use App\Services\GameService;
-
-use Illuminate\Support\Str;
-
-use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-
-use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-
-use Illuminate\Support\Facades\Cache;
-
-// use Illuminate\Support\Facades\View;
+use App\Services\ShowcaseService;
 
 class GameController extends Controller
 {
-    protected Game $game;
-    protected GameService $gameService;
+    protected $showcaseService;
 
-    public function __construct(Game $game, GameService $gameService)
+    public function __construct(ShowcaseService $showcaseService)
     {
-        $this->game = $game;
-        $this->gameService = $gameService;
+        $this->showcaseService = $showcaseService;
     }
 
     public function index(IndexRequest $request, $id=null)
     {
         if ($id) {
-            $response = $this->gameService->getGame($id);
-            return view('game', ['data' => $response]);
+            $response = $this->showcaseService->launch($id);
+            $template = 'game';
+        } else {
+            $response = $this->showcaseService->gamesCollection($request);
+            $template = 'game_list';
         }
 
-        $games = Cache::remember('game-list', '86400', function () {
-            return GameService::getGameList();
-        });
-        
-        $gamesCollection = collect($games['response']);
-        $filtered = $gamesCollection;
-
-        if (isset($request->filter) && Str::contains($request->filter, [':','page','provider','game'])) {
-            
-            $filterBy = $request->filter;
-
-            list($key, $value) = explode(':', $filterBy);
-            
-            if ($key == 'provider') {
-                $value = str_replace("-", " ", $value);
-                $filtered = $gamesCollection->filter(function ($val) use ($value) {
-                    return strtolower($val['category']) == strtolower($value);
-                });
-            } 
-            
-            if ($key == 'game') {
-                $value = str_replace("-", " ", $value);
-                $filtered = $gamesCollection->filter(function ($val) use ($value) {
-                    return (strtolower($val['name']) == strtolower($value) || strtolower($val['gamename']) == strtolower($value)) ;
-                });
-            } 
+        if ($response['error']) {
+            abort(503); // service unavailable
         }
 
-        $paginatedItems = $filtered->paginate(10);
-        $paginatedItems->setPath('/games?filter=' . $request->filter);
-        return view('game_list', ['data' => $paginatedItems]);
+        return view($template, ['data' => $response]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\ShowcaseService;
 
 class GameServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,9 @@ class GameServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('showcase', function ($app) {
+            return new ShowcaseService();
+        });
     }
 
     /**
