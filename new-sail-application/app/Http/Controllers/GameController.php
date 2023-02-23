@@ -16,6 +16,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 // use Illuminate\Support\Facades\View;
 
@@ -33,68 +35,37 @@ class GameController extends Controller
     public function index(IndexRequest $request, $id=null)
     {
         if ($id) {
-            // return $this->gameService->getGame($id);
             $response = $this->gameService->getGame($id);
             return view('game', ['data' => $response]);
         }
 
         $games = GameService::getGameList();
         $gamesCollection = collect($games['response']);
+        $filtered = $gamesCollection;
 
-        $start = 0;
-        $max = 10;
         if (isset($request->filter) && Str::contains($request->filter, [':','page','provider','game'])) {
             
-            $currentPage = null;
-            if (str_contains($request->filter, "|")) {
-                list($filterBy, $currentPage) = explode("|", $request->filter);
-            } else {
-                $filterBy = $request->filter;
-            }
+            $filterBy = $request->filter;
 
             list($key, $value) = explode(':', $filterBy);
             
             if ($key == 'provider') {
-                //replace underscore for spaces
                 $value = str_replace("-", " ", $value);
                 $filtered = $gamesCollection->filter(function ($val) use ($value) {
                     return strtolower($val['category']) == strtolower($value);
                 });
-            } else if ($key == 'game') {
-                //replace underscore for spaces
+            } 
+            
+            if ($key == 'game') {
                 $value = str_replace("-", " ", $value);
                 $filtered = $gamesCollection->filter(function ($val) use ($value) {
                     return (strtolower($val['name']) == strtolower($value) || strtolower($val['gamename']) == strtolower($value)) ;
                 });
-            } else if ($key == 'page') {
-                if ($value == 'all') {
-                    $max = count($gamesCollection);
-                } else {
-                    $max = 10; 
-                    $start = ($max * $value) - 10;
-                }
-                $filtered = $gamesCollection;
-            } else {
-                $filtered = $gamesCollection;
-            }  
-
-            if ($currentPage) {
-                list($page, $pageVal) = explode(':', $currentPage);
-                if ($pageVal == 'all') {
-                    $start = 0;
-                    $max = count($filtered);
-                } else {
-                    $max = 10; 
-                    $start = ($max * $pageVal) - 10;
-                }
-            }
-
+            } 
         }
 
-        print_r('max: ' . $max);
-        print_r('start: ' . $start);
-
-        $chunked = $filtered->slice($start, $max);
-        dd($chunked->all());
+        $paginatedItems = $filtered->paginate(10);
+        $paginatedItems->setPath('/games?filter=' . $request->filter);
+        return view('game_list', ['data' => $paginatedItems]);
     }
 }
