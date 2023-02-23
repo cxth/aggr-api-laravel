@@ -54,13 +54,11 @@
 </head>
 <body>
     <div class="gallery">
-
         <ul>
         @foreach ($data as $game)
             <li><a href="{{ URL::to('games/' . $game['id']) }}" target="_blank">{{ $game['name'] }}</a></li>
         @endforeach
         </ul>
-
     </div>
     <div class="pagination">
         {{ $data->links() }}

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
 
@@ -15,11 +14,6 @@ use App\Http\Controllers\GameController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
+// Route::prefix('games')->group(function () {
+//     Route::get('/{id?}', [GameController::class, 'index']);
 // });
-
-Route::prefix('games')->group(function () {
-    // Route::get('/{param?}', [GameController::class, 'index']);
-    Route::get('/{id?}', [GameController::class, 'index']);
-});

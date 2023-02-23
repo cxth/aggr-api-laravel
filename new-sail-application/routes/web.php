@@ -14,11 +14,6 @@ use App\Http\Controllers\GameController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::prefix('games')->group(function () {
     Route::get('/{id?}', [GameController::class, 'index']);
-    // return view('welcome');
 });
