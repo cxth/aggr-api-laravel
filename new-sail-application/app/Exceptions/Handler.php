@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Exceptions\InvalidAPIURLException;
 use Throwable;
 
 class Handler extends ExceptionHandler

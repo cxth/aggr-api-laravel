@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Exception;
 
 class GameService
 {
@@ -42,29 +43,52 @@ class GameService
         ];
     }
 
-    public function getGame()
+    public function validateResponse($response)
     {
-        
-        $gameIdSetting = array('gameid' => $this->gameId);
-        $payload = array_merge($gameIdSetting, $this->getGamePayload());
-        
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post(config('global.game.api.url'), $payload);
-
         $responseData = $response->json();
 
-        return $responseData;
+        // check valid API url
+        if ($response->getStatusCode() === 404) {
+            throw new Exception('API URL not found');
+        }
+
+        if (isset($responseData['error']) && $responseData['error'] === 1) {
+            throw new Exception($responseData['message']);
+        }
+    }
+
+    public function getGame()
+    {
+        try {
+            $gameIdSetting = array('gameid' => $this->gameId);
+            $payload = array_merge($gameIdSetting, $this->getGamePayload());
+            
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post(config('global.game.api.url'), $payload);
+
+            $this->validateResponse($response);
+
+        } catch(Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+
+        return $response->json();
     }
 
     public function getGameList() 
     {        
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post(config('global.game.api.url'), $this->getGameListPayload());
-
-        $responseData = $response->json();
-
-        return $responseData;
+        try {
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->post(config('global.game.api.url'), $this->getGameListPayload());
+    
+            $this->validateResponse($response);
+            
+        } catch(Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    
+        return $response->json();;
     }
 }

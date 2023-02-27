@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
-
 use App\Services\GameService;
 use Exception;
 
@@ -26,12 +25,15 @@ class ShowcaseService extends GameService
     public function gamesCollection($request) 
     {     
         try {
-            
             Cache::flush();
             $games = Cache::remember('game-list', config('global.cache.ttl'), function () {
                 return $this->getGameList();
             });
-            
+
+            if ($games['error']) {
+                throw new Exception($games['message']);
+            }
+
             $gamesCollection = collect($games['response']);
             $filteredList = $gamesCollection;
 
@@ -59,7 +61,7 @@ class ShowcaseService extends GameService
             $paginatedItems = $filteredList->paginate(config('global.pagination.perPage'));
             $paginatedItems->setPath('/games?filter=' . $request->filter);            
 
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Game\IndexRequest;
 use App\Services\ShowcaseService;
+use Exception;
 
 class GameController extends Controller
 {
@@ -16,17 +17,21 @@ class GameController extends Controller
 
     public function index(IndexRequest $request, $id=null)
     {
-        if ($id) {
-            $response = $this->showcaseService->launch($id);
-            $template = 'game';
-        } else {
-            $response = $this->showcaseService->gamesCollection($request);
-            $template = 'game_list';
-        }
+        try {
+            if ($id) {
+                $response = $this->showcaseService->launch($id);
+                $template = 'game';
+            } else {
+                $response = $this->showcaseService->gamesCollection($request);
+                $template = 'game_list';
+            }
 
-        if ($response['error']) {
-            report(json_encode($response));
-            abort(503); // service unavailable
+            if ($response['error']) {
+                throw new Exception($response['message']);
+            }
+            
+        } catch(Exception $e) {
+            return view('game_error', ['error' => $response]);
         }
 
         return view($template, ['data' => $response]);
