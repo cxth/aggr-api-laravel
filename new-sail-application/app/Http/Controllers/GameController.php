@@ -34,7 +34,6 @@ class GameController extends Controller
             return view('game_error', ['error' => $response['games']]);
         }
 
-        // return view($template, ['data' => $response]);
         return view($template, [
             'data' => $response['games'],
             'data_images' => $response['valid_images']

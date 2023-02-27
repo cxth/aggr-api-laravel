@@ -73,7 +73,10 @@ class GameService
             return ['error' => true, 'message' => $e->getMessage()];
         }
 
-        return $response->json();
+        return [
+            'games' => $response->json(),
+            'valid_images' => [] // @TODO remove this
+        ];
     }
 
     public function getGameList() 
