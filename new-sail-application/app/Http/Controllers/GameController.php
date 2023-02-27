@@ -25,6 +25,7 @@ class GameController extends Controller
         }
 
         if ($response['error']) {
+            report(json_encode($response));
             abort(503); // service unavailable
         }
 

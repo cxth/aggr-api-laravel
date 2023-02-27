@@ -44,6 +44,7 @@ class GameService
 
     public function getGame()
     {
+        
         $gameIdSetting = array('gameid' => $this->gameId);
         $payload = array_merge($gameIdSetting, $this->getGamePayload());
         

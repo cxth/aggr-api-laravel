@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 use App\Services\GameService;
+use Exception;
 
 class ShowcaseService extends GameService
 {
@@ -24,34 +25,44 @@ class ShowcaseService extends GameService
 
     public function gamesCollection($request) 
     {     
-        // Cache::flush();
-        $games = Cache::remember('game-list', config('global.cache.ttl'), function () {
-            return $this->getGameList();
-        });
-        
-        $gamesCollection = collect($games['response']);
-        $filteredList = $gamesCollection;
-
-        if (isset($request->filter) && Str::contains($request->filter, [':','provider','game'])) {
-            $filterBy = $request->filter;
-            list($key, $value) = explode(':', $filterBy);
-            $value = str_replace("-", " ", $value);
-            $filteredList = $gamesCollection->filter(function ($val) use ($key, $value) {
-                switch ($key) {
-                    case "provider":
-                        return strtolower($val['category']) == strtolower($value);
-                        break;
+        try {
             
-                    case "game":
-                        return (strtolower($val['name']) == strtolower($value) || strtolower($val['gamename']) == strtolower($value));
-                        break;
-                }
+            Cache::flush();
+            $games = Cache::remember('game-list', config('global.cache.ttl'), function () {
+                return $this->getGameList();
             });
+            
+            $gamesCollection = collect($games['response']);
+            $filteredList = $gamesCollection;
+
+            if (isset($request->filter)) {
+                if (Str::contains($request->filter, ['provider:','game:'])) {
+                    $filterBy = $request->filter;
+                    list($key, $value) = explode(':', $filterBy);
+                    $value = str_replace("-", " ", $value);
+                    $filteredList = $gamesCollection->filter(function ($val) use ($key, $value) {
+                        switch ($key) {
+                            case "provider":
+                                return strtolower($val['category']) == strtolower($value);
+                                break;
+                    
+                            case "game":
+                                return (strtolower($val['name']) == strtolower($value) || strtolower($val['gamename']) == strtolower($value));
+                                break;
+                        }
+                    });
+                } else {
+                    throw new Exception("Invalid filter parameter");
+                }
+            }
+
+            $paginatedItems = $filteredList->paginate(config('global.pagination.perPage'));
+            $paginatedItems->setPath('/games?filter=' . $request->filter);            
+
+        } catch (Throwable $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
         }
-
-        $paginatedItems = $filteredList->paginate(config('global.pagination.perPage'));
-        $paginatedItems->setPath('/games?filter=' . $request->filter);
-
+    
         return $paginatedItems;
     }
 }
