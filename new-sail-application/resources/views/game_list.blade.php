@@ -56,7 +56,14 @@
     <div class="gallery">
         <ul>
         @foreach ($data as $game)
-            <li><a href="{{ URL::to('games/' . $game['id']) }}" target="_blank">{{ $game['name'] }}</a></li>
+            <li>
+                <a href="{{ URL::to('games/' . $game['id']) }}" target="_blank">{{ $game['name'] }}</a>
+                @if ($data_images[$game['id']]['image'])
+                    <img src="{{ URL::to($game['image']) }}" alt="" width="100" height="100" />
+                @else
+                    <img src="{{ URL::to(asset('storage/slot-default.png')) }}" alt="no image" width="100" height="100" />
+                @endif
+            </li>
         @endforeach
         </ul>
     </div>

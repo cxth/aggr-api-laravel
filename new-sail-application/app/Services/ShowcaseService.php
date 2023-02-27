@@ -7,13 +7,25 @@ use Illuminate\Support\Str;
 use App\Services\GameService;
 use Exception;
 
+use Illuminate\Support\Facades\Http;
+
 class ShowcaseService extends GameService
 {
     public $gameId;
+    public $validImage = [];
     
     public function __construct()
     {
 
+    }
+
+    public function validateImages($items) 
+    {
+        foreach($items as $item) {
+            $this->validImage[$item['id']]['image'] = Cache::remember('game.image.' . $item['id'], config('global.cache.ttl'), function () use ($item) {
+                return (Http::get($item['image'])->successful()) ? true : false;
+            });
+        }
     }
 
     public function launch($gameId) 
@@ -25,7 +37,7 @@ class ShowcaseService extends GameService
     public function gamesCollection($request) 
     {     
         try {
-            Cache::flush();
+            // Cache::flush();
             $games = Cache::remember('game-list', config('global.cache.ttl'), function () {
                 return $this->getGameList();
             });
@@ -59,12 +71,17 @@ class ShowcaseService extends GameService
             }
 
             $paginatedItems = $filteredList->paginate(config('global.pagination.perPage'));
-            $paginatedItems->setPath('/games?filter=' . $request->filter);            
+            $paginatedItems->setPath('/games?filter=' . $request->filter);
+            
+            $this->validateImages($paginatedItems);
 
         } catch (Exception $e) {
             return ['error' => true, 'message' => $e->getMessage()];
         }
     
-        return $paginatedItems;
+        return [
+            'games' => $paginatedItems,
+            'valid_images' => $this->validImage
+        ];
     }
 }

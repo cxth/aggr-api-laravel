@@ -26,14 +26,18 @@ class GameController extends Controller
                 $template = 'game_list';
             }
 
-            if ($response['error']) {
-                throw new Exception($response['message']);
+            if ($response['games']['error']) {
+                throw new Exception($response['games']['message']);
             }
-            
+
         } catch(Exception $e) {
-            return view('game_error', ['error' => $response]);
+            return view('game_error', ['error' => $response['games']]);
         }
 
-        return view($template, ['data' => $response]);
+        // return view($template, ['data' => $response]);
+        return view($template, [
+            'data' => $response['games'],
+            'data_images' => $response['valid_images']
+        ]);
     }
 }
