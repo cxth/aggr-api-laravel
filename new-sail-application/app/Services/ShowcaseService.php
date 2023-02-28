@@ -21,10 +21,11 @@ class ShowcaseService extends GameService
 
     public function validateImages($items) 
     {
+        // Cache::flush();
         foreach($items as $item) {
             $this->validImage[$item['id']]['image'] = Cache::remember('game.image.' . $item['id'], config('global.cache.ttl'), function () use ($item) {
-                // return (Http::get($item['image'])->successful()) ? true : false;
-                return (Http::head($item['image'])->successful()) ? true : false;
+                $response = Http::head($item['image']);
+                return ($response->status() !== 200) ? false : true;
             });
         }
     }

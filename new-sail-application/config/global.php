@@ -17,6 +17,7 @@ return [
         ],
         'currency' => 'EUR',
         'lang' => 'en',
-        'playForFun' => 'true'
+        'playForFun' => 'true',
+        'defaultImage' => 'slot-default.png'
     ]
 ];

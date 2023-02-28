@@ -60,7 +60,7 @@
                 @if ($data_images[$game['id']]['image'])
                     <img src="{{ URL::to($game['image']) }}" alt="" width="100" height="100" />
                 @else
-                    <img src="{{ URL::to(asset('storage/slot-default.png')) }}" alt="no image" width="100" height="100" />
+                    <img src="{{ URL::to(asset('storage/' . config('global.game.defaultImage'))) }}" alt="no image" width="100" height="100" />
                 @endif
                 <h2>{{ $game['name'] }}</h2>
                 </a>
