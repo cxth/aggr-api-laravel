@@ -20,23 +20,24 @@ class GameController extends Controller
         try {
             if ($id) {
                 $response = $this->showcaseService->launch($id);
-                $template = 'game';
+
+                if (isset($response['error']) && $response['error']) {
+                    throw new Exception($response['message'] ?? 'Something went wrong');
+                }
+
+                return view('game', ['game' => $response['games'], 'info' => $response['game_info']]);
+
             } else {
                 $response = $this->showcaseService->gamesCollection($request);
-                $template = 'game_list';
-            }
 
-            if ($response['games']['error']) {
-                throw new Exception($response['games']['message']);
-            }
+                if (isset($response['error']) && $response['error']) {
+                    throw new Exception($response['message'] ?? 'Something went wrong');
+                }
 
+                return view('game_list', ['games' => $response['games'], 'data_images' => $response['valid_images']]);
+            }
         } catch(Exception $e) {
-            return view('game_error', ['error' => $response['games']]);
+            return view('game_error', ['error' => true, 'message' => $e->getMessage()]);
         }
-
-        return view($template, [
-            'data' => $response['games'],
-            'data_images' => $response['valid_images']
-        ]);
     }
 }

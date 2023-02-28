@@ -31,8 +31,29 @@ class ShowcaseService extends GameService
 
     public function launch($gameId) 
     {
-        $this->gameId = $gameId;
-        return $this->getGame();
+        try {
+            $this->gameId = $gameId;
+            $gameList = Cache::get('game-list');
+            $gameInfo = [];
+            if ($gameList) {
+                $gamesCollection = collect($gameList['response']);
+                $filterResult = $gamesCollection->filter(function ($game, $k) use ($gameId) {
+                    if ($game['id'] == $gameId) return $game; 
+                });
+                $gameInfo = $filterResult->all();
+            }
+
+            if (key($gameInfo) === null) {
+                throw new Exception('Game ID not found');
+            }
+
+            $gameData = array_merge($this->getGame(), ['game_info' => $gameInfo[key($gameInfo)]]);
+
+        } catch(Exception $e) {
+            return ['error' => true, 'message' => $e->getMessage()];
+        }
+    
+        return $gameData;
     }
 
     public function gamesCollection($request) 

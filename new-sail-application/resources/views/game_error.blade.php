@@ -7,8 +7,8 @@
     <title>Reevo</title>
 </head>
 <body>
-    @if($error['message'])
-    <p>{{ $error['message'] }}</p>
+    @if($error)
+    <p>{{ $message }}</p>
     @endif
 </body>
 </html>

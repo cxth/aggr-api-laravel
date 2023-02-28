@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Picture Gallery</title>
+    <title>Reevo</title>
     <style>
         .gallery {
             display: flex;
@@ -54,22 +54,21 @@
 </head>
 <body>
     <div class="gallery">
-        <ul>
-        @foreach ($data as $game)
-            <li>
-                <a href="{{ URL::to('games/' . $game['id']) }}" target="_blank">{{ $game['name'] }}
+        @foreach ($games as $game)
+            <div class="gallery-item">
+                <a href="{{ URL::to('games/' . $game['id']) }}" target="_blank">
                 @if ($data_images[$game['id']]['image'])
                     <img src="{{ URL::to($game['image']) }}" alt="" width="100" height="100" />
                 @else
                     <img src="{{ URL::to(asset('storage/slot-default.png')) }}" alt="no image" width="100" height="100" />
                 @endif
+                <h2>{{ $game['name'] }}</h2>
                 </a>
-            </li>
+            </div>
         @endforeach
-        </ul>
     </div>
     <div class="pagination">
-        {{ $data->links() }}
+        {{ $games->links() }}
     </div>
 </body>
 </html>

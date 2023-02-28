@@ -2,7 +2,7 @@
 
 return [
     'pagination' => [
-       'perPage' => '10'
+       'perPage' => '12'
     ],
 
     'cache' => [
