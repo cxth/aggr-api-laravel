@@ -9,10 +9,10 @@
 7. test api calls
 
 Get Game List:
-- http://localhost/api/games
-- http://localhost/api/games?filter=provider:reevo&page=2
-- http://localhost/api/games?filter=game:Tower-of-Babel
+- http://localhost:8080/games
+- http://localhost:8080/games?filter=provider:reevo&page=2
+- http://localhost:8080/games?filter=game:Tower-of-Babel
 
 Get Game:
-- http://localhost/api/games/911873
-- http://localhost/api/games/912129
+- http://localhost:8080/games/911873
+- http://localhost:8080/games/912129
