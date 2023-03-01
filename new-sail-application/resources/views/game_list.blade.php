@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Reevo</title>
+
+
+    @viteReactRefresh
+    @vite(['resources/js/app.jsx', 'resources/sass/app.scss'])
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         .gallery {
             display: flex;
@@ -76,7 +79,5 @@
     </div>
     <!-- React JS -->
     <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
-    @viteReactRefresh
-    @vite('resources/js/app.jsx')
 </body>
 </html>
